@@ -6,11 +6,93 @@
         <link href="styles.css" rel="stylesheet">
     </head>
     <body>
-        <div id="btn"><button id="button">Clear Grid</button></div>
+        <div id="header"><h1>Etch-a-Sketch</h1></div>
+
         <div id="main">
+            <fieldset id="canvas-options">
+                <legend>Canvas Options</legend>
+                <section id="canvas-square-amount-container">
+                    <h4>Number of Squares-per-side</h4>
+                    <div id="slider-container">
+                        <input id="slider" type="range" min="1" max="100" value="16">
+                        <input id="cell-amount" type="number" min="1" max="100" value="16">
+                    </div>
+                    <div><button id="cell-amount-btn">Apply</button></div>
+                </section>
+                <section id="canvas-bgcolor-container">
+                    <h4>Background Color</h4>
+                    <div id="canvas-bgcolor-options">
+                        <span class="canvas-bg-colors">
+                            <input type="radio" id="black-canvas-color" name="canvas-bg-color">
+                            <label for="black-canvas-color">Black</label>
+                            <div id="black-box"></div>
+                        </span>
+                        <span class="canvas-bg-colors">
+                            <input type="radio" id="white-canvas-color" name="canvas-bg-color" checked>
+                            <label for="white-canvas-color">White</label>
+                            <div id="white-box"></div>
+                        </span>
+                        <span class="canvas-bg-colors">
+                            <input type="radio" id="custom-canvas-color" name="canvas-bg-color">
+                            <label for="custom-canvas-color">Custom</label>
+                            <input type="color" id="canvas-color-picker" value="#FF1493">
+                        </span>
+                    </div>
+                </section>
+                <section id="canvas-gridtoggle-container">
+                    <div>
+                        <label for="canvas-grid-toggle">Toggle Grid</label>
+                        <input type="checkbox" id="canvas-grid-toggle">
+                        <span>i</span>
+                    </div>
+                </section>
+                <section id="clear-canvas-container">
+                    <button id="clear-canvas-btn">Clear Canvas</button>
+                </section>
+            </fieldset>
+
             <div id="grid-container">
                 <div id="grid"></div>
             </div>
+            
+            <fieldset id="pen-options">
+                <legend>Pen Options</legend>
+                <section id="activation-mode-container">
+                    <h4>Activation Mode</h4>
+                    <button id="click-drag-btn">Click & Drag</button>
+                    <button id="hover-drag-btn">Hover & Drag</button>
+                </section>
+                <section id="ink-options-container">
+                    <h4>Ink Color</h4>
+                    <div id="ink-options">
+                        <span class="ink-colors">
+                            <input type="radio" id="black-ink-color" name="ink-color">
+                            <label for="black-ink-color">Black</label>
+                            <div id="black-box"></div>
+                        </span>
+                        <span class="ink-colors">
+                            <input type="radio" id="random-ink-color" name="ink-color" checked>
+                            <label for="random-ink-color">Random</label>
+                            <div id="random-box"></div>
+                        </span>
+                        <span class="ink-colors">
+                            <input type="radio" id="custom-ink-color" name="ink-color">
+                            <label for="custom-ink-color">Custom</label>
+                            <input type="color" id="ink-color-picker" value="#FF4500">
+                        </span>
+                    </div>
+                </section>
+                <section id="ink-darkening-container">
+                    <div>
+                        <label for="ink-darkening-toggle">Ink Darkening</label>
+                        <input type="checkbox" id="ink-darkening-toggle">
+                        <span>i</span>
+                    </div>
+                </section>
+                <section id="ink-eraser-container">
+                    <button id="ink-eraser-btn">Eraser</button>
+                </section>
+            </fieldset>
         </div>
 
         <script src="script.js"></script>

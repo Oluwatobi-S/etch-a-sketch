@@ -3,34 +3,38 @@ html, body {
     background-color: blue;
 }
 
+h1 {
+    text-align: center;
+}
+
 #main {
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    justify-items: center;
     align-items: center;
 }
 
-#grid {
-    box-sizing: border-box;
-    width: 700px;
-    height: 700px;
-    border: 1px solid red;
-    border-radius: 10px;
-    padding: 10px;
-    background-color: yellowgreen;
-    display: grid;
+#canvas-options {
+    width: 250px;
+    text-align: center;
+    padding: 0;
 }
 
-.grid-cell {
-    box-sizing: border-box;
-    background-color: white;
+#canvas-square-amount-container, #activation-mode-container {
+    border-bottom: 1px solid black;
 }
 
-#btn {
+#slider-container, #canvas-bgcolor-options, #ink-options {
     display: flex;
     justify-content: center;
 }
 
-#button {
+#cell-amount {
+    width: 30px;
+}
+
+#cell-amount-btn, #clear-canvas-btn, #click-drag-btn, 
+#hover-drag-btn, #ink-eraser-btn {
     background-color: #4CAF50;
     border: none;
     color: white;
@@ -41,6 +45,89 @@ html, body {
     cursor: pointer;
 }
 
-#button:hover {
+#cell-amount-btn:hover, #clear-canvas-btn:hover, #click-drag-btn:hover, 
+#hover-drag-btn:hover, #ink-eraser-btn:hover {
     background-color: green;
+}
+
+#canvas-bgcolor-container, #ink-options-container {
+    height: 120px;
+    border-bottom: 1px solid black;
+}
+
+#canvas-bgcolor-options label, #ink-options label {
+    display: block;
+}
+
+.canvas-bg-colors, .ink-colors {
+    margin: 0 15px;
+}
+
+#black-box {
+    background-color: #000000;
+    width: 50px;
+    height: 25px;
+}
+
+#white-box {
+    background-color: #ffffff;
+    width: 50px;
+    height: 25px;
+}
+
+#canvas-color-picker, #ink-color-picker {
+    display: block;
+    box-sizing: border-box;
+    width: 50px;
+    height: 25px;
+}
+
+#canvas-gridtoggle-container, #ink-darkening-container {
+    height: 35px;
+    border-bottom: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#canvas-gridtoggle-container span, #ink-darkening-container span {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 20px;
+    border: 1px solid black;
+    border-radius: 50%;
+    background-color: white;
+}
+
+#grid {
+    box-sizing: border-box;
+    width: 550px;
+    height: 550px;
+    border: 1px solid red;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: white;
+    display: grid;
+}
+
+.grid-cell {
+    box-sizing: border-box;
+    /* background-color: white; */
+}
+
+.grid-cell-border {
+    border-right: 1px solid #d3d3d3;
+    border-bottom: 1px solid #d3d3d3;
+}
+
+#pen-options {
+    width: 250px;
+    text-align: center;
+    padding: 0;
+}
+
+#random-box{
+    width: 50px;
+    height: 25px;
+    background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
 }
