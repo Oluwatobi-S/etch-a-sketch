@@ -1,26 +1,105 @@
-const cellAmountBtn = document.getElementById("cell-amount-btn");
-const clearCanvasBtn = document.getElementById("clear-canvas-btn");
 const gridDiv = document.getElementById("grid");
-const stylesheet = document.styleSheets[0];
+const sliderNode = document.getElementById("slider");
+const cellAmtNode = document.getElementById("cell-amt");
+const cellAmtBtn = document.getElementById("cell-amt-btn");
+const canvasBgColorOptions = document.querySelectorAll(".canvasBg-color-options");
+const blackCanvasColor = document.getElementById("black-canvas-color");
+const whiteCanvasColor = document.getElementById("white-canvas-color");
+const customCanvasColor = document.getElementById("custom-canvas-color");
+const customCanvasColorPicker = document.getElementById("canvas-color-picker");
+const canvasGridToggle = document.getElementById("canvas-grid-toggle");
+const clearCanvasBtn = document.getElementById("clear-canvas-btn");
+const hoverDragBtn = document.getElementById("hover-drag-btn");
+const clickDragBtn = document.getElementById("click-drag-btn");
+const blackInkColor = document.getElementById("black-ink-color");
+const randomInkColor = document.getElementById("random-ink-color");
+const customInkColor = document.getElementById("custom-ink-color");
+const customInkColorPicker =  document.getElementById("ink-color-picker");
+const inkShadingNode = document.getElementById("ink-shading");
+const inkEraserBtn = document.getElementById("ink-eraser");
+const inkColorOptions = document.querySelectorAll(".ink-color-options");
+
 let squaresPerSide = 16;
 let totalGridCells = squaresPerSide ** 2;
 let gridCells;
+let hoverDragBtnActive = true;
+let mouseDownState = false;
 
 createGridColsAndRows();
 createGridCells(totalGridCells);
+defaultState()
 
-cellAmountBtn.addEventListener("click", resetCellAmount);
-clearCanvasBtn.addEventListener("click", resetCanvas);
-
-const canvasGridToggle = document.getElementById("canvas-grid-toggle");
+sliderNode.addEventListener("input", changeValue);
+cellAmtNode.addEventListener("input", changeValue);
+cellAmtBtn.addEventListener("click", resetCellAmt);
+canvasBgColorOptions.forEach(addbgColorChoiceListener);
 canvasGridToggle.addEventListener("click", toggleGrid);
+clearCanvasBtn.addEventListener("click", resetCanvas);
+hoverDragBtn.addEventListener("click", activateInkOnHover);
+clickDragBtn.addEventListener("click", activateInkOnClick);
+gridDiv.addEventListener("mouseup", stopPen);
+inkEraserBtn.addEventListener("click", eraseInk);
+inkColorOptions.forEach(item => item.addEventListener("click", () => inkEraserBtn.checked = false));
 
-function toggleGrid() {
+function createGridColsAndRows() {
+  gridDiv.setAttribute("style", 
+  `grid-template-columns: repeat(${squaresPerSide}, auto); 
+  grid-template-Rows: repeat(${squaresPerSide}, auto)`);
+}
+
+function createGridCells(amtOfCells) {
+  for(let i = 0; i < amtOfCells; i++) {
+    const gridCellDiv = document.createElement("div");
+    gridCellDiv.classList.add("grid-cell");
+
+    if (blackCanvasColor.checked) {
+      gridCellDiv.setAttribute("style", "background-color: #000000");
+    } else if (customCanvasColor.checked) {
+      gridCellDiv.setAttribute("style", `background-color: ${customCanvasColorPicker.value}`);
+    } else {
+      gridCellDiv.setAttribute("style", "background-color: #ffffff");
+    }
+
+    gridDiv.appendChild(gridCellDiv);
+  }
   gridCells = document.querySelectorAll(".grid-cell");
+}
+
+function defaultState() {
+  whiteCanvasColor.checked = true;
+  randomInkColor.checked = true;
+  activateInkOnHover();
+}
+
+function changeValue(event) {
+  if(event.target.id === "slider") {
+    cellAmtNode.value = sliderNode.value;
+  } else if (event.target.id === "cell-amt") {
+    sliderNode.value = cellAmtNode.value;
+  }
+}
+
+function resetCellAmt() {
+  validateValue();
+  while (gridDiv.hasChildNodes()) {
+    gridDiv.removeChild(gridDiv.firstChild);
+  }
+  squaresPerSide = +cellAmtNode.value;
+  totalGridCells = squaresPerSide ** 2;
+  createGridColsAndRows();
+  createGridCells(totalGridCells);
   if(canvasGridToggle.checked) {
     gridCells.forEach(addGrid);
   } else {
     gridCells.forEach(removeGrid);
+  }
+}
+
+function validateValue() {
+  if (cellAmtNode.value < 1 || cellAmtNode.value > 100) {
+    sliderNode.value = 16;
+    cellAmtNode.value = 16;
+    alert("Invalid input. Only values 1 - 100 (inclusive) are valid");
   }
 }
 
@@ -32,39 +111,59 @@ function removeGrid(item) {
   item.classList.remove("grid-cell-border");
 }
 
-function resetCanvas() {
-  while (gridDiv.hasChildNodes()) {
-    gridDiv.removeChild(gridDiv.firstChild);
+function addbgColorChoiceListener(currentItem) {
+  currentItem.addEventListener("click", changeGridColor);
+}
+
+function changeGridColor() {
+  if (blackCanvasColor.checked) {
+    gridCells.forEach(item => item.style.setProperty("background-color", "#000000"));
+  } else if (whiteCanvasColor.checked) {
+    gridCells.forEach(item => item.style.setProperty("background-color", "#ffffff"));
+  } else if (customCanvasColor.checked) {
+    gridCells.forEach(item => item.style.setProperty("background-color", customCanvasColorPicker.value));
   }
-  createGridCells(totalGridCells);
-  createGridColsAndRows();
-  cellAmountNode.value = squaresPerSide;
-  sliderNode.value = squaresPerSide;
+}
+
+function toggleGrid() {
   if(canvasGridToggle.checked) {
-    gridCells = document.querySelectorAll(".grid-cell");
     gridCells.forEach(addGrid);
   } else {
     gridCells.forEach(removeGrid);
   }
 }
 
-function createGridColsAndRows() {
-  for(let i = 0; i < stylesheet.cssRules.length; i++) {
-    if(stylesheet.cssRules[i].selectorText === "#grid") {
-      let gridCSSRule = stylesheet.cssRules[i].style;
-      gridCSSRule.setProperty("grid-template-columns", `repeat(${squaresPerSide}, auto)`);
-      gridCSSRule.setProperty("grid-template-Rows", `repeat(${squaresPerSide}, auto)`);
-    }
+function resetCanvas() {
+  while (gridDiv.hasChildNodes()) {
+    gridDiv.removeChild(gridDiv.firstChild);
+  }
+  createGridColsAndRows();
+  createGridCells(totalGridCells);
+  cellAmtNode.value = squaresPerSide;
+  sliderNode.value = squaresPerSide;
+  if(canvasGridToggle.checked) {
+    gridCells.forEach(addGrid);
+  } else {
+    gridCells.forEach(removeGrid);
   }
 }
 
-function createGridCells(amountOfCells) {
-  for(let i = 0; i < amountOfCells; i++) {
-      const gridCellDiv = document.createElement("div");
-      gridCellDiv.classList.add("grid-cell");
-      gridCellDiv.setAttribute("data-pen-opacity", "0");
-      gridCellDiv.setAttribute("style", "background-color: #ffffff");
-      gridDiv.appendChild(gridCellDiv);
+function activateInkOnHover() {
+  gridCells.forEach(item => item.addEventListener("mouseover", changeCellColor));
+}
+
+function changeCellColor(event) {
+  if (blackInkColor.checked) {
+    event.target.style.setProperty("background-color", "#000000");
+  } else if (randomInkColor.checked) {
+    const newColor = `rgb(${randomNum(0, 255)}, ${randomNum(0, 255)}, ${randomNum(0, 255)})`;
+    event.target.style.setProperty("background-color", newColor);
+  } else if (customInkColor.checked) {
+    if (inkShadingNode.checked) {
+      gridCells.forEach(item => item.addEventListener("mouseover", darkenCell));
+    } else {
+      event.target.style.setProperty("background-color", customInkColorPicker.value);
+    }
   }
 }
 
@@ -73,122 +172,38 @@ function randomNum(min, max) {
   return num;
 }
 
-const sliderNode = document.getElementById("slider");
-const cellAmountNode = document.getElementById("cell-amount");
+function darkenCell(event) {
+  let currentBg = event.target.style.backgroundColor;
+  let newBgColor = adjustBrightness(currentBg);
 
-sliderNode.addEventListener("input", changeValue);
-cellAmountNode.addEventListener("input", changeValue);
-
-function changeValue(event) {
-  if(event.target.id === "slider") {
-    cellAmountNode.value = sliderNode.value;
-  } else if (event.target.id === "cell-amount") {
-    sliderNode.value = cellAmountNode.value;
-  }
+  event.target.style.backgroundColor = newBgColor;
 }
 
-function resetCellAmount() {
-  gridCells = document.querySelectorAll(".grid-cell");
-  validateValue();
-  while (gridDiv.hasChildNodes()) {
-    gridDiv.removeChild(gridDiv.firstChild);
-  }
-  squaresPerSide = cellAmountNode.value;
-  totalGridCells = squaresPerSide ** 2;
-  createGridCells(totalGridCells);
-  createGridColsAndRows();
-  if(canvasGridToggle.checked) {
-    gridCells.forEach(addGrid);
-  } else {
-    gridCells.forEach(removeGrid);
-  }
+function adjustBrightness(color) {
+  let currentBgColor = color;
+  let red = (+(currentBgColor.slice(currentBgColor.indexOf('(')+1, currentBgColor.indexOf(','))));
+  currentBgColor = currentBgColor.slice(currentBgColor.indexOf(' ')+1);
+  let green = (+currentBgColor.slice(0, currentBgColor.indexOf(',')));
+  currentBgColor = currentBgColor.slice(currentBgColor.indexOf(' ')+1);
+  let blue = (+currentBgColor.slice(0, currentBgColor.indexOf(',')));
+
+  let newR = red - 10;
+  let newG = green - 10;
+  let newB = blue - 10;
+  
+  if (newR < 0) newR = 0;
+  if (newG < 0) newG = 0;
+  if (newB < 0) newB = 0;
+
+  return `rgb(${newR}, ${newG}, ${newB})`;
 }
 
-function validateValue() {
-  if (cellAmountNode.value <= 0 || cellAmountNode.value > 100) {
-    cellAmountNode.value = 16;
-    sliderNode.value = 16;
-    alert("Invalid input. Choose any value from 1 - 100 (inclusive)");
-  }
-}
-
-const canvasBackgroundColor = document.querySelectorAll(".canvas-bg-colors");
-canvasBackgroundColor.forEach(insertListener);
-
-function insertListener(currentItem) {
-  currentItem.addEventListener("click", changeGridColor);
-}
-
-function changeGridColor() {
-  const blackCanvasColor = document.getElementById("black-canvas-color");
-  const whiteCanvasColor = document.getElementById("white-canvas-color");
-  const customCanvasColor = document.getElementById("custom-canvas-color");
-  const customCanvasColorPicker =  document.getElementById("canvas-color-picker");
-
-  if (blackCanvasColor.checked) {
-    for(let i = 0; i < stylesheet.cssRules.length; i++) {
-      if(stylesheet.cssRules[i].selectorText === ".grid-cell") {
-        let gridCSSRule = stylesheet.cssRules[i].style;
-        gridCSSRule.setProperty("background-color", "#000000");
-      } 
-    }
-  } else if (whiteCanvasColor.checked) {
-    for(let i = 0; i < stylesheet.cssRules.length; i++) {
-      if(stylesheet.cssRules[i].selectorText === ".grid-cell") {
-        let gridCSSRule = stylesheet.cssRules[i].style;
-        gridCSSRule.setProperty("background-color", "#ffffff");
-      } 
-    }
-  } else if (customCanvasColor.checked) {
-    for(let i = 0; i < stylesheet.cssRules.length; i++) {
-      if(stylesheet.cssRules[i].selectorText === ".grid-cell") {
-        let gridCSSRule = stylesheet.cssRules[i].style;
-        gridCSSRule.setProperty("background-color", customCanvasColorPicker.value);
-      } 
-    }
-  }
-}
-
-const hoverDragBtn = document.getElementById("hover-drag-btn");
-hoverDragBtn.addEventListener("click", putOnHoverPen)
-
-function putOnHoverPen() {
-  gridCells = document.querySelectorAll(".grid-cell");
-  gridCells.forEach(addMouseOverListener);
-}
-
-function addMouseOverListener(currentItem) {
-  currentItem.addEventListener("mouseover", changeCellColor);
-}
-
-function changeCellColor(event) {
-  const newColor = `rgb(${randomNum(0, 255)}, ${randomNum(0, 255)}, ${randomNum(0, 255)})`;
-  event.target.style.setProperty('background-color', newColor);
-}
-
-let mouseDownState = false;
-
-const clickDragBtn = document.getElementById("click-drag-btn");
-clickDragBtn.addEventListener("click", inkActiveOnClick)
-
-function inkActiveOnClick() {
-  gridCells = document.querySelectorAll(".grid-cell");
-  gridCells.forEach(removeMouseOverListener);
+function activateInkOnClick() {
+  hoverDragBtnActive = false;
+  gridCells.forEach(item => item.removeEventListener("mouseover", changeCellColor));
   gridCells.forEach(addMouseDownListener);
   gridCells.forEach(addMouseEnterListener);
 }
-
-function removeMouseOverListener(currentItem) {
-  currentItem.removeEventListener("mouseover", changeCellColor);
-}
-
-let inkColor;
-const blackInkColor = document.getElementById("black-ink-color");
-const randomInkColor = document.getElementById("random-ink-color");
-const customInkColor = document.getElementById("custom-ink-color");
-const customInkColorPicker =  document.getElementById("ink-color-picker");
-
-const inkDarkeningToggleNode = document.getElementById("ink-darkening-toggle");
 
 function addMouseDownListener(currentItem) {
   currentItem.addEventListener("mousedown", changeCellColor);
@@ -200,8 +215,7 @@ function addMouseDownListener(currentItem) {
       const newColor = `rgb(${randomNum(0, 255)}, ${randomNum(0, 255)}, ${randomNum(0, 255)})`;
       currentItem.style.setProperty('background-color', newColor);
     } else if (customInkColor.checked) {
-      if (inkDarkeningToggleNode.checked && mouseDownState === true) {
-        gridCells = document.querySelectorAll(".grid-cell");
+      if (inkShadingNode.checked && mouseDownState === true) {
         gridCells.forEach(item => item.addEventListener("mousedown", darkenCell));
       } else {
         currentItem.style.setProperty('background-color', customInkColorPicker.value);
@@ -210,35 +224,17 @@ function addMouseDownListener(currentItem) {
   }
 }
 
-function darkenCell(event) {
-  const penOpacityAttrValPlus = (+event.target.getAttribute("data-pen-opacity") + 0.1).toFixed(1);
-  event.target.setAttribute("data-pen-opacity", `${penOpacityAttrValPlus}`);
-  let currentBackgroundColor = event.target.style.backgroundColor;
-  let red = (+(currentBackgroundColor.slice(currentBackgroundColor.indexOf('(')+1, currentBackgroundColor.indexOf(','))));
-  currentBackgroundColor = currentBackgroundColor.slice(currentBackgroundColor.indexOf(' ')+1);
-  let green = (+currentBackgroundColor.slice(0, currentBackgroundColor.indexOf(',')));
-  currentBackgroundColor = currentBackgroundColor.slice(currentBackgroundColor.indexOf(' ')+1);
-  let blue = (+currentBackgroundColor.slice(0, currentBackgroundColor.indexOf(',')));
-  console.log(`red: ${red}, green: ${green}, blue: ${blue}`)
-  let alpha = penOpacityAttrValPlus;
-
-  console.log(`The new background is: rgba(${red},${green},${blue},${alpha})`)
-
-  event.target.style.backgroundColor = `rgba(${red},${green},${blue},${alpha})`;
-}
-
 function addMouseEnterListener(currentItem) {
   currentItem.addEventListener("mouseenter", changeCellColor);
   function changeCellColor() {
-    if(mouseDownState) {
-      if(blackInkColor.checked) {
+    if (mouseDownState) {
+      if (blackInkColor.checked) {
         currentItem.style.setProperty('background-color', "#000000");
       } else if (randomInkColor.checked) {
         const newColor = `rgb(${randomNum(0, 255)}, ${randomNum(0, 255)}, ${randomNum(0, 255)})`;
         currentItem.style.setProperty('background-color', newColor);
       } else if (customInkColor.checked) {
-        if (inkDarkeningToggleNode.checked &&  mouseDownState === true) {
-          gridCells = document.querySelectorAll(".grid-cell");
+        if (inkShadingNode.checked &&  mouseDownState === true) {
           gridCells.forEach(item => item.addEventListener("mouseenter", darkenCell));
         } else {
           currentItem.style.setProperty('background-color', customInkColorPicker.value);
@@ -248,40 +244,67 @@ function addMouseEnterListener(currentItem) {
   }
 }
 
-gridDiv.addEventListener("mouseup", stopPen);
-
 function stopPen() {
   mouseDownState = false;
-  gridCells = document.querySelectorAll(".grid-cell");
   gridCells.forEach(item => item.removeEventListener("mouseenter", darkenCell));
 }
 
-function changeGridColor() {
-  const blackCanvasColor = document.getElementById("black-canvas-color");
-  const whiteCanvasColor = document.getElementById("white-canvas-color");
-  const customCanvasColor = document.getElementById("custom-canvas-color");
-  const canvasColorPicker =  document.getElementById("canvas-color-picker");
+function eraseInk() {
+  if(inkEraserBtn.checked) {
+    blackInkColor.checked = false;
+    randomInkColor.checked = false;
+    customInkColor.checked = false;
+    hoverDragBtn.addEventListener("click", activateInkOnHover);
+    clickDragBtn.addEventListener("click", activateInkOnClick);
 
-  if (blackCanvasColor.checked) {
-    for(let i = 0; i < stylesheet.cssRules.length; i++) {
-      if(stylesheet.cssRules[i].selectorText === ".grid-cell") {
-        let gridCSSRule = stylesheet.cssRules[i].style;
-        gridCSSRule.setProperty("background-color", "#000000");
-      } 
+    function activateInkOnHover() {
+      gridCells.forEach(item => item.addEventListener("mouseover", changeCellColor));
     }
-  } else if (whiteCanvasColor.checked) {
-    for(let i = 0; i < stylesheet.cssRules.length; i++) {
-      if(stylesheet.cssRules[i].selectorText === ".grid-cell") {
-        let gridCSSRule = stylesheet.cssRules[i].style;
-        gridCSSRule.setProperty("background-color", "#ffffff");
-      } 
+
+    function changeCellColor(event) {
+      if (blackCanvasColor.checked && inkEraserBtn.checked) {
+        event.target.style.setProperty("background-color", "#000000");
+      } else if (whiteCanvasColor.checked && inkEraserBtn.checked) {
+        event.target.style.setProperty("background-color", "#ffffff");
+      } else if (customCanvasColor.checked && inkEraserBtn.checked) {
+        event.target.style.setProperty("background-color", customCanvasColorPicker.value);
+      }
     }
-  } else if (customCanvasColor.checked) {
-    for(let i = 0; i < stylesheet.cssRules.length; i++) {
-      if(stylesheet.cssRules[i].selectorText === ".grid-cell") {
-        let gridCSSRule = stylesheet.cssRules[i].style;
-        gridCSSRule.setProperty("background-color", canvasColorPicker.value);
-      } 
+
+    function activateInkOnClick() {
+      hoverDragBtnActive = false;
+      gridCells.forEach(item => item.removeEventListener("mouseover", changeCellColor));
+      gridCells.forEach(addMouseDownListener);
+      gridCells.forEach(addMouseEnterListener);
+    }
+  }
+
+  function addMouseDownListener(currentItem) {
+    currentItem.addEventListener("mousedown", changeCellColor);
+    function changeCellColor() {
+      mouseDownState = true;
+      if (blackCanvasColor.checked && inkEraserBtn.checked) {
+        currentItem.style.setProperty("background-color", "#000000");
+      } else if (whiteCanvasColor.checked && inkEraserBtn.checked) {
+        currentItem.style.setProperty("background-color", "#ffffff");
+      } else if (customCanvasColor.checked && inkEraserBtn.checked) {
+        currentItem.style.setProperty("background-color", customCanvasColorPicker.value);
+      }
+    }
+  }
+
+  function addMouseEnterListener(currentItem) {
+    currentItem.addEventListener("mouseenter", changeCellColor);
+    function changeCellColor() {
+      if (mouseDownState) {
+        if (blackCanvasColor.checked && inkEraserBtn.checked) {
+          currentItem.style.setProperty("background-color", "#000000");
+        } else if (whiteCanvasColor.checked && inkEraserBtn.checked) {
+          currentItem.style.setProperty("background-color", "#ffffff");
+        } else if (customCanvasColor.checked && inkEraserBtn.checked) {
+          currentItem.style.setProperty("background-color", customCanvasColorPicker.value);
+        }
+      }
     }
   }
 }
