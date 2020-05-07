@@ -7,7 +7,7 @@ color to use for sketching.
 Furthermore, users can choose either to erase specific part of their sketch 
 or to clear the whole canvas.
 
-Feel free to [use the app here](#).
+Feel free to [use the app here](https://oluwatobi-s.github.io/etch-a-sketch/).
 
 **Note:**
 

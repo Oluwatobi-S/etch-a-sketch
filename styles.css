@@ -3,10 +3,11 @@
     src: url("assets/fonts/fredericka-the-great.regular.ttf");
 }
 
+html, body, h4 {margin: 0;}
+
 html, body {
 	height: 100%;
 	width: 100%;
-	margin: 0;
 	background: #A18A77;
 	background: linear-gradient(rgba(111, 78, 55, 0.3), rgba(111, 78, 55, 0.3)), url("https://cdn.pixabay.com/photo/2016/11/29/01/54/wood-1866667_1280.jpg");
 	background-repeat: no-repeat;
@@ -29,10 +30,6 @@ h1, #canvas-options, #pen-options {
 	color: #2c1608;
 }
 
-h4 {
-	margin: 0;
-}
-
 #canvas-options, #pen-options, #footer a {
 	font-family: 'PT Serif', serif;
 }
@@ -44,31 +41,22 @@ h4 {
     align-items: center;
 }
 
-fieldset {
-	border: 2px groove #987456;
-}
+fieldset, legend {border: 2px groove #987456;}
 
 legend {
 	margin: 0 auto;
-	border: 2px groove #987456;
 	padding: 4px 8px;
 }
 
-#canvas-options {
-    width: 250px;
-}
+#canvas-options {width: 250px;}
 
-#canvas-options, #pen-options {
-    padding: 0;
-}
+#canvas-options, #pen-options {padding: 0;}
 
-#canvas-sq-amt-container, #activation-mode-container {
+#canvas-sq-amt-container, #activation-mode-container, #slider-container {
 	margin-top: 10px;
 }
 
-.ui-container {
-	border-bottom: 2px groove #987456;
-}
+.ui-container {border-bottom: 2px groove #987456;}
 
 #slider-container, #canvas-bgcolor-options, #canvas-gridtoggle-container,
 #ink-options, #ink-shading-container, #ink-eraser-container {
@@ -77,7 +65,6 @@ legend {
 }
 
 #slider-container {
-	margin-top: 10px;
 	margin-bottom: 5px;
 	align-items: center;
 }
@@ -147,24 +134,16 @@ button:hover {
 	color: #c19a6b;
 }
 
-button:active {
-	box-shadow: 0 0 8px rgba(44, 22, 8, 0.7);
-}
+button:active {box-shadow: 0 0 8px rgba(44, 22, 8, 0.7);}
 
 button:focus {outline:0;}
 
-#canvas-bgcolor-container, #ink-options-container {
-    height: 120px;
-}
+#canvas-bgcolor-container, #ink-options-container {height: 120px;}
 
 #canvas-bgcolor-options label, #ink-options label,
-#canvas-color-picker, #ink-color-picker {
-    display: block;
-}
+#canvas-color-picker, #ink-color-picker {display: block;}
 
-.canvas-bg-colors, .ink-colors {
-    margin: 0 15px;
-}
+.canvas-bg-colors, .ink-colors {margin: 0 15px;}
 
 #black-box, #white-box, #canvas-color-picker,
 #random-box, #ink-color-picker {
@@ -174,18 +153,12 @@ button:focus {outline:0;}
 	border: 1px solid #483c32;
 }
 
-#black-box {
-    background-color: #000000;
-}
+#black-box {background-color: #000000;}
 
-#white-box {
-    background-color: #ffffff;
-}
+#white-box {background-color: #ffffff;}
 
 #canvas-color-picker, #ink-color-picker, #grid,
-.info, .grid-cell {
-    box-sizing: border-box;
-}
+.info, .grid-cell {box-sizing: border-box;}
 
 #canvas-gridtoggle-container, #ink-shading-container, #ink-eraser-container {
     height: 50px;
@@ -241,9 +214,7 @@ input:checked + .slider::before {
 	transform: translateX(26px);
 }
 
-input:checked + .slider {
-	background-color: #6f4e37;
-}
+input:checked + .slider {background-color: #6f4e37;}
 
 .switch-on-off, .switch-on-off::before, .switch-on-off::after {
 	position: absolute;
@@ -285,7 +256,7 @@ input:checked ~ .switch-on-off::before {
 	color: #2c1608;
 }
 
-.tooltip-text {
+.toggle-tooltip {
 	visibility: hidden;
 	width: 120px;
 	background-color: #6f4e37;
@@ -299,7 +270,7 @@ input:checked ~ .switch-on-off::before {
 	font-family: 'Roboto', sans-serif;
 }
 
-.info .tooltip-text::after {
+.info .toggle-tooltip::after {
 	content: " ";
 	position: absolute;
 	top: 50%;
@@ -308,10 +279,6 @@ input:checked ~ .switch-on-off::before {
 	border-width: 5px;
 	border-style: solid;
 	border-color: transparent #6f4e37 transparent transparent;
-}
-
-.info:hover .tooltip-text {
-	visibility: visible;
 }
 
 .shading-tooltip {
@@ -339,9 +306,8 @@ input:checked ~ .switch-on-off::before {
 	border-color: #6f4e37 transparent  transparent transparent;
 }
 
-.info:hover .shading-tooltip {
-	visibility: visible;
-}
+.info:hover .toggle-tooltip, .info:hover .shading-tooltip, 
+.info:hover .erase-tooltip {visibility: visible;}
 
 .erase-tooltip {
 	visibility: hidden;
@@ -368,10 +334,6 @@ input:checked ~ .switch-on-off::before {
 	border-color: transparent transparent #6f4e37 transparent;
 }
 
-.info:hover .erase-tooltip {
-	visibility: visible;
-}
-
 #grid {
     width: 550px;
     height: 550px;
@@ -387,9 +349,7 @@ input:checked ~ .switch-on-off::before {
     border-bottom: 1px solid #d3d3d3;
 }
 
-#pen-options {
-    width: 280px;
-}
+#pen-options {width: 280px;}
 
 .ink-colors {
 	display: inline-block;
@@ -412,6 +372,4 @@ input:checked ~ .switch-on-off::before {
 	color: #2c1608;
 }
 
-#footer a:hover {
-	color: #8b4513;
-}
+#footer a:hover {color: #8b4513;}
