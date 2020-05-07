@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title>Etch-A-Sketch</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link href="styles.css" rel="stylesheet">
     </head>
     <body>
@@ -11,7 +12,7 @@
         <div id="main">
             <fieldset id="canvas-options">
                 <legend>Canvas Options</legend>
-                <section id="canvas-sq-amt-container">
+                <section id="canvas-sq-amt-container" class="ui-container">
                     <h4>Number of Squares-per-side</h4>
                     <div id="slider-container">
                         <input id="slider" type="range" min="1" max="100" value="16">
@@ -19,7 +20,7 @@
                     </div>
                     <div><button id="cell-amt-btn">Apply</button></div>
                 </section>
-                <section id="canvas-bgcolor-container">
+                <section id="canvas-bgcolor-container" class="ui-container">
                     <h4>Background Color</h4>
                     <div id="canvas-bgcolor-options">
                         <span class="canvas-bg-colors">
@@ -28,7 +29,7 @@
                             <div id="black-box"></div>
                         </span>
                         <span class="canvas-bg-colors">
-                            <input type="radio" id="white-canvas-color" class="canvasBg-color-options" name="canvas-bg-color" checked>
+                            <input type="radio" id="white-canvas-color" class="canvasBg-color-options" name="canvas-bg-color" checked="checked">
                             <label for="white-canvas-color">White</label>
                             <div id="white-box"></div>
                         </span>
@@ -39,14 +40,18 @@
                         </span>
                     </div>
                 </section>
-                <section id="canvas-gridtoggle-container">
-                    <div>
-                        <label for="canvas-grid-toggle">Toggle Grid</label>
-                        <input type="checkbox" id="canvas-grid-toggle">
-                        <span>i</span>
-                    </div>
+                <section id="canvas-gridtoggle-container" class="ui-container">
+                    <span class="switch-label">Toggle Grid</span>
+                    <label class="switch">
+                        <input type="checkbox" id="canvas-grid-toggle-switch">
+                        <span class="slider"></span>
+                        <span class="switch-on-off" data-on="On" data-off="Off"></span>
+                    </label>
+                    <span class="info">i
+                        <span class="tooltip-text">Toggle on to show Grid Lines</span>
+                    </span>
                 </section>
-                <section id="clear-canvas-container">
+                <section id="clear-canvas-container" class="clear-canvas">
                     <button id="clear-canvas-btn">Clear Canvas</button>
                 </section>
             </fieldset>
@@ -57,12 +62,12 @@
             
             <fieldset id="pen-options">
                 <legend>Pen Options</legend>
-                <section id="activation-mode-container">
+                <section id="activation-mode-container" class="ui-container">
                     <h4>Activation Mode</h4>
                     <button id="hover-drag-btn">Hover & Drag</button>
                     <button id="click-drag-btn">Click & Drag</button>
                 </section>
-                <section id="ink-options-container">
+                <section id="ink-options-container" class="ui-container">
                     <h4>Ink Color</h4>
                     <div id="ink-options">
                         <span class="ink-colors">
@@ -71,7 +76,7 @@
                             <div id="black-box"></div>
                         </span>
                         <span class="ink-colors">
-                            <input type="radio" id="random-ink-color" class="ink-color-options" name="ink-color" checked>
+                            <input type="radio" id="random-ink-color" class="ink-color-options" name="ink-color" checked="checked">
                             <label for="random-ink-color">Random</label>
                             <div id="random-box"></div>
                         </span>
@@ -82,20 +87,32 @@
                         </span>
                     </div>
                 </section>
-                <section id="ink-shading-container">
-                    <h4>Ink Shading</h4>
+                <section id="ink-shading-container" class="ui-container">
+                    <span class="switch-label">Ink Shading</span>
                     <label class="switch">
-                        <input type="checkbox" id="ink-shading" class="switch-input">
-                        <span class="switch-label" data-on="On" data-off="Off"></span> 
-                        <span class="switch-handle"></span> 
+                        <input type="checkbox" id="ink-shading">
+                        <span class="slider"></span>
+                        <span class="switch-on-off" data-on="On" data-off="Off"></span> 
                     </label>
+                    <span class="info">i
+                        <span class="shading-tooltip">Works only with Custom Ink</span>
+                    </span>
                 </section>
-                <section id="ink-eraser-container">
-                    <label for="ink-eraser">Eraser</label>
-                    <input type="checkbox" id="ink-eraser">
+                <section id="ink-eraser-container" class="eraser">
+                    <span class="switch-label">Eraser</span>
+                    <label class="switch">
+                        <input type="checkbox" id="ink-eraser">
+                        <span class="slider"></span>
+                        <span class="switch-on-off" data-on="On" data-off="Off"></span> 
+                    </label>
+                    <span class="info">i
+                        <span class="erase-tooltip">Select an Activation Mode to Erase with</span>
+                    </span>
                 </section>
             </fieldset>
         </div>
+
+        <div id="footer"><a href="https://github.com/Oluwatobi-S" target="_blank">Created by Oluwatobi Sofela <i class="fa fa-github"></i></a></div>
 
         <script src="script.js"></script>
     </body>
